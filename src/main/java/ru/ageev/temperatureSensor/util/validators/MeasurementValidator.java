@@ -1,4 +1,4 @@
-package ru.ageev.temperatureSensor.util;
+package ru.ageev.temperatureSensor.util.validators;
 
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -14,7 +14,6 @@ public class MeasurementValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        MeasurementDto measurementDto = (MeasurementDto) target;
 
         if (errors.hasFieldErrors("value")) {
             errors.rejectValue("value", "value incorrect");

@@ -1,13 +1,12 @@
 package ru.ageev.temperatureSensor.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.ageev.temperatureSensor.models.Measurement;
+import org.springframework.stereotype.Repository;
+import ru.ageev.temperatureSensor.models.Sensor;
 
-import java.util.List;
+import java.util.Optional;
 
-public interface SensorRepositories extends JpaRepository<Measurement, Integer> {
-    List<Measurement> findAll();
-
-    int countByIsRaining(boolean isRaining);
-
+@Repository
+public interface SensorRepositories extends JpaRepository<Sensor, Integer> {
+    Optional<Sensor> findByName(String name);
 }

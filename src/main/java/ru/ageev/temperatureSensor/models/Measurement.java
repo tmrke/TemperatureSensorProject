@@ -31,6 +31,25 @@ public class Measurement {
     @Column(name = "timestamp")
     private Timestamp timestamp;
 
+    @Column(name = "sensor_id")
+    private int sensorId;
+
+    public boolean isRaining() {
+        return isRaining;
+    }
+
+    public void setRaining(boolean raining) {
+        isRaining = raining;
+    }
+
+    public int getSensorId() {
+        return sensorId;
+    }
+
+    public void setSensorId(int sensorId) {
+        this.sensorId = sensorId;
+    }
+
     public int getId() {
         return id;
     }
