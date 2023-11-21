@@ -1,5 +1,6 @@
 package ru.ageev.temperatureSensor.services;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,28 +12,33 @@ import org.springframework.validation.FieldError;
 import ru.ageev.temperatureSensor.Dto.SensorDto;
 import ru.ageev.temperatureSensor.models.Sensor;
 import ru.ageev.temperatureSensor.repositories.SensorRepositories;
+import ru.ageev.temperatureSensor.security.JwtTokenRepository;
 import ru.ageev.temperatureSensor.util.exceptions.RegistrationErrorException;
 import ru.ageev.temperatureSensor.util.validators.RegistrationValidator;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class RegistrationService {
+public class SensorService {
     private final SensorRepositories sensorRepositories;
     private final RegistrationValidator registrationValidator;
     private final ModelMapper modelMapper;
+    private final JwtTokenRepository jwtTokenRepository;
 
     @Autowired
-    public RegistrationService(SensorRepositories sensorRepositories, RegistrationValidator registrationValidator, ModelMapper modelMapper) {
+    public SensorService(SensorRepositories sensorRepositories, RegistrationValidator registrationValidator, ModelMapper modelMapper, JwtTokenRepository jwtTokenRepository) {
         this.sensorRepositories = sensorRepositories;
         this.registrationValidator = registrationValidator;
         this.modelMapper = modelMapper;
+        this.jwtTokenRepository = jwtTokenRepository;
     }
 
     @Transactional
-    public ResponseEntity<HttpStatus> registration(SensorDto sensorDto, BindingResult bindingResult) throws RegistrationErrorException {
+    public ResponseEntity<HttpStatus> registration(SensorDto sensorDto,
+                                                   BindingResult bindingResult,
+                                                   HttpServletRequest request
+    ) throws RegistrationErrorException {
         registrationValidator.validate(sensorDto, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -52,6 +58,7 @@ public class RegistrationService {
 
         Sensor sensor = modelMapper.map(sensorDto, Sensor.class);
         sensor.setRegistrationDate(new Timestamp(System.currentTimeMillis()));
+        sensor.setToken(jwtTokenRepository.generateToken(request).getToken());
 
         sensorRepositories.save(sensor);
 

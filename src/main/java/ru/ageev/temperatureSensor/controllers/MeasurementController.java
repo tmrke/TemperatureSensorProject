@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 
@@ -12,11 +14,13 @@ import ru.ageev.temperatureSensor.Dto.MeasurementDto;
 import ru.ageev.temperatureSensor.services.MeasurementService;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("measurement")
 public class MeasurementController {
     private final MeasurementService measurementService;
+
 
     @Autowired
     public MeasurementController(MeasurementService measurementService) {
@@ -25,7 +29,15 @@ public class MeasurementController {
 
     @PostMapping("/add")
     public ResponseEntity<HttpStatus> addMeasurement(
-            @RequestBody @Valid MeasurementDto measurementDto, BindingResult bindingResult) {
+            @RequestBody @Valid MeasurementDto measurementDto,
+            BindingResult bindingResult,
+            Authentication authentication) {
+
+        if(authentication == null){
+            System.out.println("ololo");
+        }
+
+        System.out.println(authentication.getCredentials().toString());
 
         return measurementService.save(measurementDto, bindingResult);
     }
