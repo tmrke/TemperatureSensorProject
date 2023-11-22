@@ -38,8 +38,6 @@ public class MeasurementController {
             System.out.println("ololo");
         }
 
-        System.out.println(authentication.getCredentials().toString());
-
         return measurementService.save(measurementDto, bindingResult);
     }
 

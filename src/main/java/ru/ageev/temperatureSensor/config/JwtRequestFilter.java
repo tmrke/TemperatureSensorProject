@@ -24,17 +24,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authHeader = request.getHeader("Authorization");
-        String sensorName = "sens3";
-
-        if (SecurityContextHolder.getContext().getAuthentication() == null) {
-            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                    sensorName, null
-            );
-
-            SecurityContextHolder.getContext().setAuthentication(token);
-        }
-
         filterChain.doFilter(request, response);
     }
 }

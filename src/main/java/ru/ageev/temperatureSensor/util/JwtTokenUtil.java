@@ -13,8 +13,6 @@ public class JwtTokenUtil {
 
     public String generateToken() {
         return Jwts.builder()
-                .setSubject("sens3")
-                .claim("sens3", "sens3")
                 .signWith(Keys.secretKeyFor(SignatureAlgorithm.HS512))
                 .compact();
     }

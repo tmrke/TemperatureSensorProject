@@ -38,8 +38,7 @@ public class SecurityConfig {
                                 .requestMatchers("/measurement",
                                         "/measurement/rainyDaysCount",
                                         "/measurement/add").authenticated())
-                .sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+                .sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }
