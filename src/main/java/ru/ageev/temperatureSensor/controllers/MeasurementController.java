@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 @Controller
+@RestController
 @RequestMapping("measurement")
 public class MeasurementController {
     private final MeasurementService measurementService;
@@ -43,13 +44,11 @@ public class MeasurementController {
     }
 
     @GetMapping("/rainyDaysCount")
-    @ResponseBody
     public int getRainyDaysCount() {
         return measurementService.getRainyDaysCount();
     }
 
     @GetMapping
-    @ResponseBody
     public List<MeasurementDto> getMeasurements() {
         return measurementService.findAll();
     }

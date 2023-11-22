@@ -11,6 +11,8 @@ public class SensorDto {
     @Size(min = 3, max = 30, message = "name length must be more than 2 and less 100")
     private String password;
 
+    private String token;
+
     public String getName() {
         return name;
     }
@@ -25,5 +27,13 @@ public class SensorDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
