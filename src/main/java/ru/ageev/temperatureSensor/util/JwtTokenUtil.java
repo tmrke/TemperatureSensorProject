@@ -3,7 +3,7 @@ package ru.ageev.temperatureSensor.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,8 @@ import java.util.stream.Collectors;
 
 @Component
 public class JwtTokenUtil {
-    private final byte[] secretKeyBytes = Keys.secretKeyFor(SignatureAlgorithm.HS512).getEncoded();
+    @Value("${spring.security.secretKey}")
+    private String secretKey;
 
     public String generateToken(UserDetails sensorDetails) {
         Map<String, Object> claims = new Hashtable<>();
@@ -34,13 +35,13 @@ public class JwtTokenUtil {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(sensorDetails.getUsername())
-                .signWith(Keys.hmacShaKeyFor(secretKeyBytes), SignatureAlgorithm.HS512)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
 
     public Claims getAllClaims(String token) {
         return Jwts.parser()
-                .setSigningKey(Keys.hmacShaKeyFor(secretKeyBytes))
+                .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();

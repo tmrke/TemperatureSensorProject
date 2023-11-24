@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +15,7 @@ import org.springframework.validation.FieldError;
 import ru.ageev.temperatureSensor.Dto.MeasurementDto;
 import ru.ageev.temperatureSensor.models.Measurement;
 import ru.ageev.temperatureSensor.repositories.MeasurementRepositories;
+import ru.ageev.temperatureSensor.security.SensorDetails;
 import ru.ageev.temperatureSensor.util.exceptions.MeasurementErrorException;
 import ru.ageev.temperatureSensor.util.validators.MeasurementValidator;
 
@@ -30,16 +29,22 @@ public class MeasurementService {
     private final ModelMapper modelMapper;
     private final MeasurementValidator measurementValidator;
     private final SensorService sensorService;
-    private final AuthenticationManager authenticationManager;
+    private final SensorDetailsService sensorDetailsService;
 
 
     @Autowired
-    public MeasurementService(MeasurementRepositories measurementRepositories, ModelMapper modelMapper, MeasurementValidator measurementValidator, SensorService sensorService, AuthenticationManager authenticationManager) {
+    public MeasurementService(
+            MeasurementRepositories measurementRepositories,
+            ModelMapper modelMapper,
+            MeasurementValidator measurementValidator,
+            SensorService sensorService,
+            SensorDetailsService sensorDetailsService
+    ) {
         this.measurementRepositories = measurementRepositories;
         this.modelMapper = modelMapper;
         this.measurementValidator = measurementValidator;
         this.sensorService = sensorService;
-        this.authenticationManager = authenticationManager;
+        this.sensorDetailsService = sensorDetailsService;
     }
 
     public List<MeasurementDto> findAll() {
@@ -70,14 +75,10 @@ public class MeasurementService {
         }
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        SensorDetails sensorDetails = (SensorDetails) sensorDetailsService.loadUserByUsername(authentication.getName());
 
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authentication.getName(), authentication.getCredentials().toString()));
-        } catch (BadCredentialsException e) {
-            System.out.println("Че то не так");
-
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
+        Authentication authenticated = new UsernamePasswordAuthenticationToken(sensorDetails.getUsername(), sensorDetails.getPassword());
+        SecurityContextHolder.getContext().setAuthentication(authenticated);
 
         Measurement measurement = modelMapper.map(measurementDto, Measurement.class);
         measurement.setTimestamp(new Timestamp(System.currentTimeMillis()));

@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 @Entity
 @Table(name = "temperature_measurements")

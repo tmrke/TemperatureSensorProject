@@ -1,9 +1,6 @@
 package ru.ageev.temperatureSensor.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -25,19 +22,8 @@ public class Sensor {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "token")
-    private String token;
-
     @OneToMany(mappedBy = "owner")
     private List<Measurement> measurementList;
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
 
     public int getId() {
         return id;

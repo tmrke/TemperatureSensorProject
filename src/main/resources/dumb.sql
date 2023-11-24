@@ -1,12 +1,11 @@
--- # drop table sensor;
--- # drop table temperature_measurements;
+# drop table sensor;
+# drop table temperature_measurements;
 
 create table sensor
 (
     id                int primary key auto_increment,
     name              varchar(100) not null,
     password          varchar(255),
-    token             varchar(255),
     registration_date datetime
 );
 

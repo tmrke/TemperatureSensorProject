@@ -1,6 +1,5 @@
 package ru.ageev.temperatureSensor.config;
 
-import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,7 +14,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import ru.ageev.temperatureSensor.util.JwtTokenUtil;
 
 import java.io.IOException;
-import java.security.SignatureException;
 import java.util.stream.Collectors;
 
 @Component
@@ -36,15 +34,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
-            try {
-                System.out.println("Received JWT: " + jwt);
-                username = jwtTokenUtil.getUsername(jwt);
-            } catch (MalformedJwtException e) {
-                System.out.println("Malformed JWT: " + jwt);
-                e.printStackTrace();  // Добавьте вывод трассировки стека
-                logger.debug("Malformed JWT: " + jwt);
-                logger.debug("Invalid JWT token", e);
-            }
+            username = jwtTokenUtil.getUsername(jwt);
         }
 
         if (username != null && authentication == null) {
