@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(name = "sensor")
@@ -26,6 +27,9 @@ public class Sensor {
 
     @Column(name = "token")
     private String token;
+
+    @OneToMany(mappedBy = "owner")
+    private List<Measurement> measurementList;
 
     public String getToken() {
         return token;
@@ -65,5 +69,13 @@ public class Sensor {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Measurement> getMeasurementList() {
+        return measurementList;
+    }
+
+    public void setMeasurementList(List<Measurement> measurementList) {
+        this.measurementList = measurementList;
     }
 }

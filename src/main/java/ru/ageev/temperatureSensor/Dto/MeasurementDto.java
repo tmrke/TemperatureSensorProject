@@ -3,8 +3,6 @@ package ru.ageev.temperatureSensor.Dto;
 import jakarta.validation.constraints.*;
 
 public class MeasurementDto {
-      @NotNull
-    private int sensor_id;
     @NotNull(message = "isRaining must be true or false")
     private boolean isRaining;
 
@@ -34,13 +32,5 @@ public class MeasurementDto {
 
     public void setValue(double value) {
         this.value = value;
-    }
-
-    public int getSensor_id() {
-        return sensor_id;
-    }
-
-    public void setSensor_id(int sensor_id) {
-        this.sensor_id = sensor_id;
     }
 }

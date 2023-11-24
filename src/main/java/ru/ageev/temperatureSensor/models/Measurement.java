@@ -3,11 +3,10 @@ package ru.ageev.temperatureSensor.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(name = "temperature_measurements")
@@ -31,8 +30,10 @@ public class Measurement {
     @Column(name = "timestamp")
     private Timestamp timestamp;
 
-    @Column(name = "sensor_id")
-    private int sensorId;
+    @ManyToOne
+    @JoinColumn(name = "sensor_id", referencedColumnName = "id")
+    private Sensor owner;
+
 
     public boolean isRaining() {
         return isRaining;
@@ -40,14 +41,6 @@ public class Measurement {
 
     public void setRaining(boolean raining) {
         isRaining = raining;
-    }
-
-    public int getSensorId() {
-        return sensorId;
-    }
-
-    public void setSensorId(int sensorId) {
-        this.sensorId = sensorId;
     }
 
     public int getId() {
@@ -80,5 +73,13 @@ public class Measurement {
 
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public Sensor getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Sensor owner) {
+        this.owner = owner;
     }
 }

@@ -3,7 +3,7 @@ package ru.ageev.temperatureSensor.Dto;
 import jakarta.validation.constraints.*;
 
 public class SensorDto {
-    @NotEmpty
+       @NotEmpty
     @Size(min = 3, max = 30, message = "name length must be more than 2 and less 31")
     private String name;
 
@@ -11,7 +11,10 @@ public class SensorDto {
     @Size(min = 3, max = 30, message = "name length must be more than 2 and less 100")
     private String password;
 
-    private String token;
+    public SensorDto(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
 
     public String getName() {
         return name;
@@ -29,11 +32,4 @@ public class SensorDto {
         this.password = password;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
 }
